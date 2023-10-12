@@ -1,10 +1,11 @@
 import { v4 as uuid4 } from "uuid";
 
-import { FightingStyle, RPGCharacter } from "../types/RPGCharacter";
+import { RPGCharacter } from "../types/RPGCharacter";
+import { FightingStyle } from "../types/fightingstyle";
 
-function createCharacter(name: string, archtype: string, fightingStyle:FightingStyle): RPGCharacter {
+function createCharacter(name: string, archetype: string, fightingStyle:FightingStyle): RPGCharacter {
     return {
-        id: uuidv4(),
+        id: uuid4(),
         name,
         archetype,
         fightingStyle,
@@ -12,4 +13,6 @@ function createCharacter(name: string, archtype: string, fightingStyle:FightingS
     }
 }
 
+const newCharacter = createCharacter('Raul', 'Elf', 'ranged')
+console.log(newCharacter)
 

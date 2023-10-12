@@ -2,7 +2,7 @@ import {v4 as uuid4} from 'uuid';
 import { RPGCharacter } from 'src/types/RPGCharacter';
 import { addToInventory, createInventoryItem, removeFromInventory } from 'src/functions/inv-functions';
 import { InventoryItem } from '../types/itemType';
-import { FightingStyle } from '../types/fightingstyle';
+import { FightingStyle } from '../types/fightingStyle';
 
 const main = () => {
 

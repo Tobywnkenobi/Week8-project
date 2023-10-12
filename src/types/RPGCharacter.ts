@@ -1,7 +1,7 @@
 import { v4 as uuid4 } from "uuid";
 
 import { InventoryItem, Weapon, Armor } from "./itemType";
-import { FightingStyle } from "src/types/fightingstyle";
+import { FightingStyle } from "./fightingStyle";
 
 export class RPGCharacter {
     id: string;

@@ -1,4 +1,2 @@
-
-export type FightingStyle = 'ranged' | 'melee'
-
+export type FightingStyle = 'ranged' | 'melee';
 

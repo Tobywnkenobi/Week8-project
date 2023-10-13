@@ -1,60 +1,61 @@
 import { v4 as uuid4 } from "uuid";
 
-import { InventoryItem, Weapon, Armor } from "./itemType";
+import { addToInventory, removeFromInventory, inventoryValue, createInventoryItem } from "src/functions/inv-functions";
+import { InventoryItem, Armor, Weapon, Shop } from "src/types/itemType";
 import { FightingStyle } from "./fightingStyle";
 
 export class RPGCharacter {
-    id: string;
-    name: string;
-    archetype: string;
-    fightingStyle: FightingStyle;
-    inventory: InventoryItem[];
+    addToInventory(sword: Weapon) {
+        throw new Error("Method not implemented.");
+    }
+    private _id: string;
+    private _name: string;
+    private _archetype: string;
+    private _fightingStyle: FightingStyle;
+    private _inventory: InventoryItem[] = []
 
 
-constructor(
-    id: string,
-    name: string,
-    archetype: string,
-    fightingStyle: FightingStyle,
-    inventory: InventoryItem[] = []
-) {
-    this.id = id
-    this.name = name
-    this.archetype = archetype
-    this.fightingStyle = fightingStyle
-    this.inventory = inventory
+constructor(name: string, archetype: string, fighting:FightingStyle) {
+    this._id = uuid4()
+    this._name = name
+    this._archetype = archetype
+    this._fightingStyle = fightingStyle
+  }
+
+  get name(): string {
+    return this._name
+  }
+
+  set name(newName: string) {
+    this._name = newName
+  }
 
 
 }
 
 attack(opponent: RPGCharacter): void {
-    let weapon = this.inventory.find(item => "damage" in item) as Weapon | undefined
-    let damage = weapon ? weapon.damage: 10
-    opponent.takeDamage(damage)
+    let weapon = this._inventory.find(item => "damage" in item) as Weapon | undefined;
+    let damage = weapon ? weapon.damage : 10;
+    opponent.takeDamage(damage);
 }
 
 takeDamage(damage: number): void {
-    let armor = this.inventory.find(item => 'defense' in item) as Armor | undefined
-    let actualDamage = armor ? damage - armor.defense : damage
-    console.log(`${this.name} takes ${actualDamage} damage!`)
+    let armor = this._inventory.find(item => 'defense' in item) as Armor | undefined;
+    let actualDamage = armor ? damage - armor.defense : damage;
+    console.log(`${this.name} takes ${actualDamage} damage!`);
 }
 
 addToInventory(item: InventoryItem): void {
-    this.inventory.push(item)
-    console.log(`${item.name} added to ${this.name}'s inventory.`)
+    this._inventory.push(item);
+    console.log(`${item.name} added to ${this.name}'s inventory.`);
 }
 
 removeFromInventory(itemId: string): void {
-    this.inventory = this.inventory.filter(item => item.id !== itemId)
-    console.log(`item removed from ${this.name}'s inventory.`)
+    this._inventory = this._inventory.filter(item => item.id !== itemId);
+    console.log(`Item removed from ${this.name}'s inventory.`);
 }
-}
-const exampleCharacter = new RPGCharacter(
-    uuid4(),
-    'archer',
-    'Elf',
-    'ranged',
-    []
-)
+
+
+const exampleCharacter = new RPGCharacter('Archer', 'Elf', 'ranged');
 
 console.log(`Generated ID: ${exampleCharacter.id}`)

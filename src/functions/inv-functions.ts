@@ -1,8 +1,9 @@
 import { v4 as uuid4 } from "uuid";
 
-import { RPGCharacter } from "../types/RPGCharacter"
-import { Armor, InventoryItem, Weapon } from "../types/itemType"
-export { addToInventory, removeFromInventory, inventoryValue, createInventoryItem }
+import { FightingStyle } from "../types/fightingStyle";
+import { RPGCharacter } from "../types/RPGCharacter";
+import { Armor, InventoryItem, Weapon } from "../types/itemType";
+export { addToInventory, removeFromInventory, inventoryValue, createInventoryItem };
 
 function createInventoryItem(
     name: string, 

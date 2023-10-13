@@ -37,16 +37,21 @@ class Armor extends InventoryItem {
 
     constructor(name:string, 
         price: number, 
-        description: string, 
-        damage: number) {
+        description: string,) {
         super(name, price, description)
-        this._defense = defense
-    }
-
-    get defense(): number {
-        return this._defense
+        this._description = description
     }
 }
+
+export type TArmor = InventoryItem & {
+    defense: number
+}
+
+export type Weapon = InventoryItem & {
+    damage: number
+
+}
+
 
 class Weapon extends InventoryItem {
     private _damage: number
@@ -67,10 +72,13 @@ class Weapon extends InventoryItem {
 class Shop {
     private _items: InventoryItem[] = []
 
-    constructor(items?: InventoryItem[]) {
-        if (items) {
-            this._items = items
-        }
+    constructor(itemData: ItemData[]) {
+        itemData.forEach(data => {
+            if(data.type === 'armor') {
+                this._items.push(new Armor(data.name, data.price, data.description, data.property))
+            }
+            
+        })
     }
 
     addItem(item: InventoryItem): void {

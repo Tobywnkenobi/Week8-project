@@ -3,32 +3,18 @@ import { InventoryItem, Weapon, Armor } from "src/types/itemType";
 import { RPGCharacter } from "src/types/RPGCharacter"; 
 import { FightingStyle } from "src/types/fightingStyle";
 
-// Creating some items
-const sword = new Weapon(uuid4(), 'Sword', 100, 'A sharp blade.', 25);
-const shield = new Armor(uuid4(), 'Shield', 50, 'A sturdy shield.', 15);
+const character1 = new RPGCharacter('Porter', 'Elf', 'ranged', 100);
+const character2 = new RPGCharacter('Lyla', 'Orc', 'melee', 100);
 
-// Create a character
-const myCharacter = new RPGCharacter('Archer', 'Elf', 'ranged');
+const sword = new Weapon('Sword', 100, 'A blade', 30);
+const shield = new Armor('Shield', 50, 'A shield', 10);
 
-// Adding items to character's inventory and printing the inventory
-myCharacter.addToInventory(sword);
-myCharacter.addToInventory(shield);
-myCharacter.printInventory(); // implement this method to print items in inventory
+character1.addToInventory(sword);
+character2.addToInventory(shield);
 
-// Removing an item from the character's inventory and printing the inventory
-myCharacter.removeFromInventory(sword.id); 
-myCharacter.printInventory();
+console.log(`${character1.name} attacks ${character2.name}!`);
+character1.attack(character2);
 
-// Creating an Inventory and adding items to it
-const myInventory = new Inventory(); // assuming you have an Inventory class ready
-myInventory.addItem(sword);
-myInventory.addItem(shield);
+console.log(`${character2.name} defends and counterattacks!`);
+character2.attack(character1);
 
-// Adding an item from Inventory to character's inventory
-myCharacter.addToInventory(myInventory.getItemById(sword.id)); // assuming getItemById is implemented
-myCharacter.printInventory();
-
-// Remove a specified quantity from the inventory - assuming you've implemented such functionality.
-// Here, you might need a quantity attribute for your items and additional logic to handle it.
-myCharacter.removeQuantityFromInventory(sword.id, 1); // Example method, implement as per your logic
-myCharacter.printInventory();

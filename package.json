@@ -2,15 +2,17 @@
   "name": "week8-project",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/RPGCharacters.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "serve ."
   },
   "keywords": [],
-  "author": "",
+  "author": "me",
   "license": "ISC",
   "devDependencies": {
     "@types/uuid": "^9.0.5",
+    "serve": "^14.2.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {

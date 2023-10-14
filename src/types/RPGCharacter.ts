@@ -5,9 +5,7 @@ import { InventoryItem, Armor, Weapon, Shop } from "src/types/itemType";
 import { FightingStyle } from "./fightingStyle";
 
 export class RPGCharacter {
-    addToInventory(sword: Weapon) {
-        throw new Error("Method not implemented.");
-    }
+    private _gold: number;
     private _id: string;
     private _name: string;
     private _archetype: string;
@@ -15,11 +13,23 @@ export class RPGCharacter {
     private _inventory: InventoryItem[] = []
 
 
-constructor(name: string, archetype: string, fighting:FightingStyle) {
+constructor(name: string, archetype: string, fightingStyle:FightingStyle, gold: number) {
     this._id = uuid4()
     this._name = name
     this._archetype = archetype
     this._fightingStyle = fightingStyle
+    this._gold = 100
+  }
+
+  buy(item: InventoryItem): void {
+    if(item.price > this._gold) {
+      console.log("Not enough gold to buy this item!")
+      return
+    }
+
+    this._gold -= item.price
+    this.addToInventory(item)
+    console.log(`${item.name} purchased for ${item.price} gold`)
   }
 
   get name(): string {
@@ -30,17 +40,20 @@ constructor(name: string, archetype: string, fighting:FightingStyle) {
     this._name = newName
   }
 
+  get id(): string {
+    return this._id
+  }
 
-}
 
-attack(opponent: RPGCharacter): void {
-    let weapon = this._inventory.find(item => "damage" in item) as Weapon | undefined;
-    let damage = weapon ? weapon.damage : 10;
-    opponent.takeDamage(damage);
-}
-
-takeDamage(damage: number): void {
-    let armor = this._inventory.find(item => 'defense' in item) as Armor | undefined;
+  
+  attack(opponent: RPGCharacter): void {
+      let weapon = this._inventory.find(item => "damage" in item) as Weapon | undefined;
+      let damage = weapon ? weapon.damage : 10;
+      opponent.takeDamage(damage);
+    }
+    
+    takeDamage(damage: number): void {
+        let armor = this._inventory.find(item => 'defense' in item) as Armor | undefined;
     let actualDamage = armor ? damage - armor.defense : damage;
     console.log(`${this.name} takes ${actualDamage} damage!`);
 }
@@ -55,6 +68,7 @@ removeFromInventory(itemId: string): void {
     console.log(`Item removed from ${this.name}'s inventory.`);
 }
 
+}
 
 const exampleCharacter = new RPGCharacter('Archer', 'Elf', 'ranged');
 

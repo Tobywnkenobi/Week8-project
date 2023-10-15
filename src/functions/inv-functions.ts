@@ -53,20 +53,37 @@ function addToCart(itemId) {
     }
 
     updateCartUI()
+    
 }
+    function updateCartUI() {
+        const cartItemsElement = document.getElementById('cart-items')
+        const totalPriceElement = document.getElementById('total-price')
+        
+        cartItemsElement.innerHTML = ''
+        
+        cart.items.forEach(item => {
+            const listItem = document.createElement('li')
+            listItem.textContent = `${item.name} ($${item.price}) x ${item.quantity}`
+            cartItemsElement?.appendChild(listItem)
+        })
+        
+        cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0)
+        totalPriceElement.textContent = `Total Price: $${cart.totalPrice}`
+    }
 
-function updateCartUI() {
-    const cartItemsElement = document.getElementById('cart-items')
-    const totalPriceElement = document.getElementById('total-price')
+    interface CartItem {
+        id: string
+        quantity: number
+    }
 
-    cartItemsElement.innerHTML = ''
+    const cart: CartItem[] = []
 
-    cart.items.forEach(item => {
-        const listItem = document.createElement('li')
-        listItem.textContent = `${item.name} ($${item.price}) x ${item.quantity}`
-        cartItemsElement?.appendChild(listItem)
-    })
+    export function addToCart(itemId: string): void {
+        const existingItem = cart.find(item => item.id === itemId)
 
-    cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0)
-    totalPriceElement.textContent = `Total Price: $${cart.totalPrice}`
-}
+        if (existingCartItem) {
+           } else {
+            cart.push({id: itemId, quantity: 1 })
+            }
+            console.log(cart)
+    }

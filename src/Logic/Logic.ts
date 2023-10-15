@@ -1,5 +1,5 @@
 import {v4 as uuid4} from 'uuid';
-import { createCharacter } ,
+import { createCharacter } from "src/functions/char-functions";
 import { RPGCharacter } from 'src/types/RPGCharacter';
 import {Weapon, Armor, InventoryItem } from "src/types/itemType"
 import { FightingStyle } from '../types/fightingStyle';

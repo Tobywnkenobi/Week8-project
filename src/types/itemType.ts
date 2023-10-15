@@ -1,5 +1,5 @@
 import { v4 as uuid} from "uuid"
-export { InventoryItem, Armor, Weapon, Shop }
+export { Armor, Weapon, Shop }
 
 
 abstract class InventoryItem {
@@ -9,10 +9,10 @@ abstract class InventoryItem {
     private _description: string;
     private _stock: number;
 
-    constructor(name: string, price: number, description: string, stock: number) {
+    constructor(name: string, value: number, description: string, stock: number) {
         this._id = uuid();
         this._name = name;
-        this._price = price;
+        this._price = value;
         this._description = description;
         this._stock = stock;
     }
@@ -36,7 +36,7 @@ abstract class InventoryItem {
         return this._name
     }
 
-    get price(): number {
+    get value(): number {
         return this._price
     }
     
@@ -49,11 +49,12 @@ class Armor extends InventoryItem {
     private _defense: number
 
     constructor(name:string, 
-        price: number, 
+        value: number, 
         description: string,
         defense: number,
+        
         ) {
-        super(name, price, description,defense)
+        super(name, value, description,defense)
         this._defense = defense
     }
 
@@ -69,18 +70,25 @@ export type TArmor = InventoryItem & {
     defense: number
 }
 
-enum ItemType {
-    Armor = 'armor',
-    Weapon = 'weapon'
+export enum ItemType {
+    Armor = 'Armor',
+    Weapon = 'Weapon'
 }
 
-export type ItemData = {
+export interface ItemData {
     type: ItemType,
     name: string,
-    price: number,
+    value: number,
     description: string,
-    property: number       //  make defense for armor, and attack for weapon
+    property: number       
+}
 
+export interface InventoryItem {
+    id: string;
+    name:string;
+    value: number;
+    description: string,
+    property: number    
 }
 
 // export type Weapon = InventoryItem & {
@@ -90,10 +98,10 @@ class Weapon extends InventoryItem {
     private _damage: number
 
     constructor(name:string,
-        price: number,
+        value: number,
         description: string,
         damage: number) {
-            super(name, price, description,damage)
+            super(name, value, description,damage)
             this._damage = damage
     }
 
@@ -135,9 +143,9 @@ class Shop {
     constructor(itemData: ItemData[]) {
         itemData.forEach(data => {
             if(data.type === ItemType.Armor) {
-                this._items.push(new Armor(data.name, data.price, data.description, data.property))
+                this._items.push(new Armor(data.name, data.value, data.description, data.property))
             } else if(data.type === ItemType.Weapon) {
-                this._items.push(new Weapon(data.name, data.price, data.description, data.property))
+                this._items.push(new Weapon(data.name, data.value, data.description, data.property))
             }
         })
     }

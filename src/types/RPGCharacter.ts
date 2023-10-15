@@ -1,8 +1,8 @@
 import { v4 as uuid4 } from "uuid";
 
-import { addToInventory, removeFromInventory, inventoryValue, createInventoryItem } from "src/functions/inv-functions";
+import { inventoryValue, createInventoryItem } from "src/functions/inv-functions";
 import { InventoryItem, Armor, Weapon, Shop } from "src/types/itemType";
-import { FightingStyle } from "./fightingStyle";
+import { FightingStyle, RangedStyle, MagicStyle, MeleeStyle } from "./fightingStyle";
 
 export class RPGCharacter {
     private _gold: number;
@@ -12,25 +12,27 @@ export class RPGCharacter {
     private _fightingStyle: FightingStyle;
     private _inventory: InventoryItem[] = []
 
+   
 
 constructor(name: string, archetype: string, fightingStyle:FightingStyle, gold: number) {
     this._id = uuid4()
     this._name = name
     this._archetype = archetype
     this._fightingStyle = fightingStyle
-    this._gold = 100
+    this._gold = gold
+    this._fightingStyle = fightingStyle
+    // this._inventory = inventory 
   }
 
   buy(item: InventoryItem): void {
-    if(item.price > this._gold) {
-      console.log("Not enough gold to buy this item!")
+    if(item.value > this._gold) {
+      console.log("Need more gold to purchase")
       return
     }
-
-    this._gold -= item.price
+    this._gold -= item.value
     this.addToInventory(item)
-    console.log(`${item.name} purchased for ${item.price} gold`)
-  }
+    console.log(`${item.name} purchased for ${item.value} gold`)  
+  }  
 
   get name(): string {
     return this._name
@@ -46,16 +48,28 @@ constructor(name: string, archetype: string, fightingStyle:FightingStyle, gold: 
 
 
   
-  attack(opponent: RPGCharacter): void {
-      let weapon = this._inventory.find(item => "damage" in item) as Weapon | undefined;
-      let damage = weapon ? weapon.damage : 10;
-      opponent.takeDamage(damage);
-    }
-    
-    takeDamage(damage: number): void {
-        let armor = this._inventory.find(item => 'defense' in item) as Armor | undefined;
-    let actualDamage = armor ? damage - armor.defense : damage;
-    console.log(`${this.name} takes ${actualDamage} damage!`);
+attack(opponent: RPGCharacter): void {
+    let weapon = this._inventory.find(item => "damage" in item) as Weapon | undefined;
+    let baseDamage = weapon ? weapon.damage : 10;
+    let modifiedDamage = this._fightingStyle.attackModifier(baseDamage)
+    opponent.takeDamage(modifiedDamage);
+  }
+  
+takeDamage(damage: number): void {
+  let armor = this._inventory.find(item => 'defense' in item) as Armor | undefined;
+  let baseDefense = armor ? armor.defense : 0
+  let modifiedDefense = this._fightingStyle.defenseModifier(baseDefense)
+  let actualDamage = Math.max(0, damage - modifiedDefense)
+  console.log(`${this.name} takes ${actualDamage} damage!`);
+}
+
+
+useSpecialAbility(): void {
+  if(this._fightingStyle.specialAbility) {
+    console.log(`${this.name} ${this._fightingStyle.specialAbility()}`)
+  } else {
+    console.log(`${this.name} has no special abilities`)
+  }
 }
 
 addToInventory(item: InventoryItem): void {
@@ -68,8 +82,12 @@ removeFromInventory(itemId: string): void {
     console.log(`Item removed from ${this.name}'s inventory.`);
 }
 
+GetInventoryValue(): number {
+  return this._inventory.reduce((total, item) => total + item.value, 0)
 }
 
-const exampleCharacter = new RPGCharacter('Archer', 'Elf', 'ranged');
+}
+
+const exampleCharacter = new RPGCharacter('Archer', 'Elf', RangedStyle, 100);
 
 console.log(`Generated ID: ${exampleCharacter.id}`)

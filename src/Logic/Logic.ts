@@ -1,8 +1,10 @@
 import {v4 as uuid4} from 'uuid';
+import { createCharacter } ,
 import { RPGCharacter } from 'src/types/RPGCharacter';
-import { addToInventory, createInventoryItem, removeFromInventory } from 'src/functions/inv-functions';
-import { InventoryItem } from '../types/itemType';
+import {Weapon, Armor, InventoryItem } from "src/types/itemType"
 import { FightingStyle } from '../types/fightingStyle';
+import { Shop } from "src/types/shop";
+import { createInventoryItem } from '../functions/inv-functions';
 
 const main = () => {
 
@@ -33,6 +35,19 @@ const printInventoryAndValue = (character: RPGCharacter, action: string) => {
 const inventoryValue = (character: RPGCharacter): number => {
     return character.inventory.reduce((total, item) => total + item.value, 0)
 }
+
+const itemData: ItemData[] =[
+    {type: ItemType.Weapon, name: 'Sword', value: 100, description: 'Better than hands',property: 30},
+    {type: ItemType.Armor, name: 'Shield', value: 150, description: 'It\'ll do!', property: 25}
+]
+
+const shop = new Shop(itemData)
+
+get inventory(): InventoryItem[] {
+    return this._inventory
+}
+
+
 
 
 main()

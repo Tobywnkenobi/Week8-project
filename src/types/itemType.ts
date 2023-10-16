@@ -1,18 +1,19 @@
 import { v4 as uuid} from "uuid"
-export { Armor, Weapon, Shop }
+export { Armor, Weapon }
 
 
-abstract class InventoryItem {
+
+export abstract class InventoryItem {
     private _id:string;
     private _name:string;
-    private _price: number;
+    private _value: number;
     private _description: string;
     private _stock: number;
 
     constructor(name: string, value: number, description: string, stock: number) {
         this._id = uuid();
         this._name = name;
-        this._price = value;
+        this._value = value;
         this._description = description;
         this._stock = stock;
     }
@@ -37,20 +38,31 @@ abstract class InventoryItem {
     }
 
     get value(): number {
-        return this._price
+        return this._value
     }
     
     get description(): string {
         return this._description
     }
 }
+
+// export interface InventoryItem {
+//     id:string;
+//     name:string;
+//     value: number;
+//     description: string;
+//     stock: number;
+
+// }
     
 class Armor extends InventoryItem {
     private _defense: number
 
-    constructor(name:string, 
+    constructor(
+        name:string, 
         value: number, 
         description: string,
+        // stock: number,
         defense: number,
         
         ) {
@@ -75,15 +87,21 @@ export enum ItemType {
     Weapon = 'Weapon'
 }
 
-export interface ItemData {
-    type: ItemType,
-    name: string,
-    value: number,
-    description: string,
-    property: number       
+export interface ItemDataType {
+    type: ItemType;
+    name: string;
+    value: number;
+    description: string;
+    property: number;
 }
 
-export interface InventoryItem {
+
+export const ItemData : ItemDataType[] = [
+    {type: ItemType.Weapon, name: 'Sword', value: 100, description: 'You could be throwing hands!', property: 30},
+    {type: ItemType.Armor, name: 'Shield', value: 150, description: 'Still more effective than thoughts and prayers!', property: 25}
+]
+
+export interface InventoryItemData {
     id: string;
     name:string;
     value: number;
@@ -97,7 +115,8 @@ export interface InventoryItem {
 class Weapon extends InventoryItem {
     private _damage: number
 
-    constructor(name:string,
+    constructor(
+        name:string,
         value: number,
         description: string,
         damage: number) {
@@ -127,6 +146,8 @@ class Weapon extends InventoryItem {
 }
     let sword = new Weapon('Sword', 85, "BroadSword", 30)
 
+    // const shopInstance = new Shop(ItemData)
+
     console.log(sword.attack())
 
     sword.damage = 35
@@ -137,65 +158,4 @@ class Weapon extends InventoryItem {
 
     // add more methods and logic to suit later weapon class
 
-class Shop {
-    private _items: InventoryItem[] = []
 
-    constructor(itemData: ItemData[]) {
-        itemData.forEach(data => {
-            if(data.type === ItemType.Armor) {
-                this._items.push(new Armor(data.name, data.value, data.description, data.property))
-            } else if(data.type === ItemType.Weapon) {
-                this._items.push(new Weapon(data.name, data.value, data.description, data.property))
-            }
-        })
-    }
-    
-    addStock(id:string, quantity: number): void {
-        if (quantity < 0) {
-            throw new Error('quantity can not be negative')
-        }
-        const item = this.getItemById(id)
-        if (!item) {
-            throw new Error(`Item with ID ${id} not found.`)        
-        }
-    
-        item.stock += quantity
-    }
-
-    private getItemById(id: string): InventoryItem | null {
-        return this._items.find(item => item.id === id) || null
-    }
-    
-    
-    addItem(item: InventoryItem): void {
-        this._items.push(item)
-    }
-    
-    get items(): InventoryItem[] {
-        return this._items
-    }
-    
-    removeItem(id:string): void {
-        this._items = this._items.filter(item => item.id !== id)
-    }
-    
-    updateItem(updateItem: InventoryItem): void {
-        this._items = this._items.map(item =>
-            item.id === updateItem.id ? updateItem : item
-            )
-        }
-        
-        // getItemsByType(type: string): InventoryItem[] {
-            //     return this._items.filter(item => item.type === type)
-            // }
-            
-            purchaseItem(id:string): InventoryItem | null {
-                const item = this.getItemById(id)
-                if(item) {
-            this.removeItem(id)
-            return item
-        } else {
-            return null
-        }
-    }
-}

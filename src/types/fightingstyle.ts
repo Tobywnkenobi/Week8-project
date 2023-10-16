@@ -1,35 +1,27 @@
-export type fightingStyle = 'ranged' | 'melee';
-
-
-enum FightingStyleName {
-    Melee = 'melee',
-    Ranged = 'ranged',
-    Magic = 'magic'
-}
 
 export type FightingStyle = {
-    name: FightingStyleName
+    name: 'Melee' | 'Magic' | 'Ranged'
     attackModifier: (baseDamage: number) => number
     defenseModifier: (baseDefense: number) => number
-    specialAbility?: () => string
+    specialAbility: () => string
 }
 
 export const MeleeStyle: FightingStyle = {
-    name: FightingStyleName.Melee,
+    name: 'Melee',
     attackModifier: baseDamage => baseDamage * 1.2,
     defenseModifier: baseDefense => baseDefense,
-    specialAbility: () => 'Uses a power melee attack!'
+    specialAbility: () => 'Swing! melee attack!'
 }
 
 export const MagicStyle: FightingStyle = {
-    name: FightingStyleName.Magic,
+    name: 'Magic',
     attackModifier: baseDamage => baseDamage,
     defenseModifier: baseDefense => baseDefense + 5,
     specialAbility: () => 'Cast Spell',
 }
 
 export const RangedStyle: FightingStyle = {
-    name: FightingStyleName.Ranged,
+    name: 'Ranged',
     attackModifier: baseDamage => baseDamage * 1.1,
     defenseModifier: baseDefense => baseDefense - 5,
     specialAbility: () => 'Firing off arrows',

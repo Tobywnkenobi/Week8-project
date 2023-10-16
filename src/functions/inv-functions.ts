@@ -2,8 +2,8 @@ import { v4 as uuid4 } from "uuid";
 
 import { FightingStyle } from "../types/fightingStyle";
 import { RPGCharacter } from "../types/RPGCharacter";
-import { Armor, InventoryItem, Weapon } from "../types/itemType";
-export { inventoryValue, createInventoryItem };
+import { Armor, Weapon } from "../types/itemType";
+export { inventoryValue, createInventoryItem, addToCart };
 
 function createInventoryItem(
     name: string, 
@@ -11,16 +11,17 @@ function createInventoryItem(
     value: number, 
     damageOrDefense: number, 
     isWeapon: boolean
-    ): Weapon | Armor {
+    ): InventoryItem {
     const baseItem = {
         id: uuid4(),
         name,
         description,
         value,
     }    
+    
     return isWeapon
-    ? { ...baseItem, damage: damageOrDefense } as Weapon
-    : { ...baseItem, defense: damageOrDefense } as Armor
+        ? { ...baseItem, damage: damageOrDefense } as Weapon
+        : { ...baseItem, defense: damageOrDefense } as Armor
     
 }
   
@@ -28,13 +29,29 @@ function inventoryValue(character: RPGCharacter): number {
     return character.inventory.reduce((total, item) => total + item.value, 0)
 }
 
-const cart = {
-    items: [],
-    totalPrice: 0
+interface InventoryItem {
+    id:string;
+    name: string;
+    description: string;
+    value: number;
+    damage?: number;
+    defense?: number
 }
 
-function addToCart(itemId) {
-    const item = myShop.items.find(i => i.id === itemId)
+interface CartItem {
+    id:string;
+    name?:string;
+    value?:number;
+    quantity:number;
+}
+
+const cart: { items: CartItem[], totalPrice: number } = {
+    items: [],
+    totalPrice: 0,
+}
+
+function addToCart(itemId: string, itemsAvailable: (Weapon | Armor)[]): void {
+    const item = itemsAvailable.find(i => i.id === itemId)
     if (!item) {
         alert('Item not found')
         return
@@ -47,43 +64,25 @@ function addToCart(itemId) {
         cart.items.push({
             id: item.id,
             name: item.name,
-            value:: item.value,
+            value: item.value,
             quantity: 1
         });
     }
 
     updateCartUI()
-    
-}
+}    
     function updateCartUI() {
         const cartItemsElement = document.getElementById('cart-items')
         const totalPriceElement = document.getElementById('total-price')
         
-        cartItemsElement.innerHTML = ''
+        cartItemsElement!.innerHTML = ''
         
         cart.items.forEach(item => {
             const listItem = document.createElement('li')
-            listItem.textContent = `${item.name} ($${item.price}) x ${item.quantity}`
+            listItem.textContent = `${item.name} ($${item.value}) x ${item.quantity}`
             cartItemsElement?.appendChild(listItem)
         })
         
-        cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0)
-        totalPriceElement.textContent = `Total Price: $${cart.totalPrice}`
-    }
-
-    interface CartItem {
-        id: string
-        quantity: number
-    }
-
-    const cart: CartItem[] = []
-
-    export function addToCart(itemId: string): void {
-        const existingItem = cart.find(item => item.id === itemId)
-
-        if (existingCartItem) {
-           } else {
-            cart.push({id: itemId, quantity: 1 })
-            }
-            console.log(cart)
+        cart.totalPrice = cart.items.reduce((total, item) => total + (item.value! * item.quantity), 0)
+        totalPriceElement!.textContent = `Total Price: $${cart.totalPrice}`
     }

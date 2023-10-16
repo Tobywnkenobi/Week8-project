@@ -6,9 +6,7 @@ import { FightingStyle, RangedStyle, MeleeStyle, MagicStyle } from "../types/fig
 export function createCharacter(name: string, archetype: string, fightingStyle:FightingStyle, gold: number): RPGCharacter {
     return new RPGCharacter(name, archetype, fightingStyle, gold)
 }
-export const newCharacter = createCharacter(name: string, archetype: string, fightingstyle: FightingStyle, gold: number): RGPCharacter {
-    return new RPGCharacter(name, archetype, fightingStyle, gold)
-}
 
-export const newCharacter = createCharacter('Raul', 'Elf', RangedStyle, 100)
+const newCharacter = createCharacter('Raul', 'Elf', RangedStyle, 100)
+
 console.log(newCharacter)

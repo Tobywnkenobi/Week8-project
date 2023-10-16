@@ -1,8 +1,8 @@
 import { v4 as uuid4 } from "uuid";
-import { InventoryItem, Weapon, Armor } from "src/types/itemType";
+import { InventoryItem, ItemData, Weapon, Armor } from "src/types/itemType";
 import { RPGCharacter } from "src/types/RPGCharacter"; 
 import { MeleeStyle, MagicStyle, RangedStyle } from "src/types/fightingStyle";
-import { Shop itializeShop, addToCart } from "src/types/shop"
+import { Shop } from "src/types/shop"
 
 // Creating Characters
 const character1 = new RPGCharacter('Porter', 'Elf', RangedStyle, 100);  
@@ -31,16 +31,19 @@ warrior.attack(wizard);
 console.log(`${wizard.name} uses special ability!`);
 wizard.useSpecialAbility();
 
-document.addEventListener("DOMContentLoaded", () => {
-    const myShop = new Shop();
-    initalizeShop(myShop);
-})
+// buttonElement.addEventListener('click', addToCart);
 
+const shopInstance = new Shop(ItemData);
 
 document.addEventListener("DOMContentLoaded", () => {
     const shopElement = document.getElementById("shop-items");
-    // Assuming `myShop` is your instance of `Shop` with items
-    myShop.items.forEach(item => {
+        
+    if (!shopElement) {
+        console.error("No element found in DOM")
+        return
+    }
+
+    shopInstance.items.forEach((item: Weapon | Armor) => {
         const itemCard = document.createElement("div");
         itemCard.classList.add("item-card");
         itemCard.innerHTML = `
@@ -49,9 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
             <p>Price: ${item.value}</p>
             <p>Stock: ${item.stock}</p>
             <button onclick="addToCart('${item.id}')">Add to Cart</button>
-        `;
-        shopElement.appendChild(itemCard);
-    });
-});
+        })`
 
-function addToCart(itemId) {
+        shopElement.appendChild(itemCard);
+    })
+
+console.log(`Adding item with ID: ${itemId} to cart.`);

@@ -1,7 +1,7 @@
 import { v4 as uuid4 } from "uuid";
 
 import { inventoryValue, createInventoryItem } from "src/functions/inv-functions";
-import { InventoryItem, Armor, Weapon, Shop } from "src/types/itemType";
+import { InventoryItem, Armor, Weapon } from "src/types/itemType";
 import { FightingStyle, RangedStyle, MagicStyle, MeleeStyle } from "./fightingStyle";
 
 export class RPGCharacter {
@@ -11,8 +11,7 @@ export class RPGCharacter {
     private _archetype: string;
     private _fightingStyle: FightingStyle;
     private _inventory: InventoryItem[] = []
-
-   
+  
 
 constructor(name: string, archetype: string, fightingStyle:FightingStyle, gold: number) {
     this._id = uuid4()
@@ -20,7 +19,7 @@ constructor(name: string, archetype: string, fightingStyle:FightingStyle, gold: 
     this._archetype = archetype
     this._fightingStyle = fightingStyle
     this._gold = gold
-    this._fightingStyle = fightingStyle
+    
     // this._inventory = inventory 
   }
 
@@ -46,7 +45,9 @@ constructor(name: string, archetype: string, fightingStyle:FightingStyle, gold: 
     return this._id
   }
 
-
+  public get inventory() {
+    return this._inventory
+  }
   
 attack(opponent: RPGCharacter): void {
     let weapon = this._inventory.find(item => "damage" in item) as Weapon | undefined;
@@ -88,6 +89,7 @@ GetInventoryValue(): number {
 
 }
 
-const exampleCharacter = new RPGCharacter('Archer', 'Elf', RangedStyle, 100);
+const exampleCharacter = new RPGCharacter('archer', 'Elf', RangedStyle, 100);
+
 
 console.log(`Generated ID: ${exampleCharacter.id}`)

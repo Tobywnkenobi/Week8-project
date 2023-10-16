@@ -55,6 +55,15 @@ export class Shop {
             return null
         }
     }
+    function createInventoryItem(
+        name: string,
+        description: string,
+        value: number,
+        weight: number,
+        isWeapon: boolean
+    )
+        
+    }
 }
 const shopInstance = new Shop(itemData)
 

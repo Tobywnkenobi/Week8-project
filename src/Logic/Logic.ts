@@ -14,7 +14,6 @@ const main = () => {
     const armor: InventoryItem = createInventoryItem('shield', 'protective gear', 200, 50, false)
 
     const character = new RPGCharacter('archer', 'Elf', RangedStyle, 100);
-
     
     character.addToInventory(sword);
     printInventoryAndValue(character, 'added Sword:');
